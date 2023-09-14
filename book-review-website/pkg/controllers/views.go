@@ -11,26 +11,39 @@ import (
 var book models.Book
 
 
-func home(writter http.ResponseWriter, request *http.Request) {
-	return
-}
-
-func add_book(writter http.ResponseWriter, request *http.Request) {
-	return
-}
-
-func get_books(writter http.ResponseWriter, request *http.Request) {
-	books := models.get_books()
-	res, _ := json.Marshal(books)
+func Home(writter http.ResponseWriter, request *http.Request) {
 	writter.Header().Set("Content-Type", "application/json")
+	writter.WriteHeader(http.StatusOK)
+	writter.Write(make([]byte, 1))
+}
+
+func AddBook(writter http.ResponseWriter, request *http.Request) {
+	writter.Header().Set("Content-Type", "application/json")
+}
+
+func GetBook(writter http.ResponseWriter, request *http.Request) {
+	writter.Header().Set("Content-Type", "application/json")
+	books := models.GetBooks()
+	res, _ := json.Marshal(books)
 	writter.WriteHeader(http.StatusOK)
 	writter.Write(res)
 }	
 
-func update_book(writter http.ResponseWriter, request *http.Request) {
-	return
+
+func GetBooks(writter http.ResponseWriter, request *http.Request) {
+	writter.Header().Set("Content-Type", "application/json")
+	books := models.GetBooks()
+	res, _ := json.Marshal(books)
+	writter.WriteHeader(http.StatusOK)
+	writter.Write(res)
+}	
+
+func UpdateBook(writter http.ResponseWriter, request *http.Request) {
+	writter.Header().Set("Content-Type", "application/json")
+
 }
 
-func delete_book(writter http.ResponseWriter, request *http.Request) {
-	return
+func DeleteBook(writter http.ResponseWriter, request *http.Request) {
+	writter.Header().Set("Content-Type", "application/json")
+
 }

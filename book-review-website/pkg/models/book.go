@@ -8,37 +8,44 @@ import (
 var db *gorm.DB
 
 type Book struct {
-	gorm.model
+	gorm.Model
 	Name string `gorm:""json:"name"`
 	Author string `json:"isbn"`
 }
 
 func init() {
 	config.Connect()
-	db = config.get_db()
+	db = config.GetDB()
 	db.AutoMigrate(&Book{})
 }
 
 
-func add_book(book *Book) *Book {
+func AddBook(book *Book) *Book {
 	db.NewRecord(book)
 	db.Create(&book)
 	return book
 }
 
-func get_book(id int64) (*Book, *gorm.DB) {
+func GetBook(id int64) (*Book, *gorm.DB) {
 	var book Book
 	db := db.Where("ID=?", id).Find(&book)
 	return &book, db
 }
 
-func get_books() []Book {
+func GetBooks() []Book {
 	var books []Book
 	db.Find(&books)
 	return books
 }
 
-func delete_book(id int64) Book {
+func DeleteBook(id int64) Book {
+	var book Book
+	db.Where("ID=?", id).Delete(book)
+	return book
+}
+
+
+func UpdateBook(id int64) Book {
 	var book Book
 	db.Where("ID=?", id).Delete(book)
 	return book
