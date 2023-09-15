@@ -19,7 +19,6 @@ func init() {
 	db.AutoMigrate(&Book{})
 }
 
-
 func AddBook(book *Book) *Book {
 	db.NewRecord(book)
 	db.Create(&book)
@@ -43,7 +42,6 @@ func DeleteBook(id int64) Book {
 	db.Where("ID=?", id).Delete(book)
 	return book
 }
-
 
 func UpdateBook(id int64) Book {
 	var book Book
