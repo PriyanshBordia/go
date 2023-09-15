@@ -10,7 +10,7 @@ var db *gorm.DB
 type Book struct {
 	gorm.Model
 	Name string `gorm:""json:"name"`
-	Author string `json:"isbn"`
+	Author string `json:"author"`
 }
 
 func init() {
@@ -37,13 +37,15 @@ func GetBooks() []Book {
 	return books
 }
 
-func DeleteBook(id int64) Book {
+func UpdateBook(id int64) (Book, *gorm.DB) {
 	var book Book
-	db.Where("ID=?", id).Delete(book)
-	return book
+	db := db.Where("ID=?", id).Update(book)
+	return book, db
 }
+// book.Name = updated_book.Name
+	// book.Author = updated_book.Author
 
-func UpdateBook(id int64) Book {
+func DeleteBook(id int64) Book {
 	var book Book
 	db.Where("ID=?", id).Delete(book)
 	return book

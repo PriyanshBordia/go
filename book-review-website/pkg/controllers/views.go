@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 	"strconv"
 
 	"github.com/PriyanshBordia/go/pkg/models"
@@ -16,7 +15,6 @@ import (
 
 
 var print = fmt.Println
-var typeOf = reflect.TypeOf
 // var book models.Book
 
 
@@ -37,7 +35,6 @@ func AddBook(writter http.ResponseWriter, request *http.Request) {
 }
 
 func GetBook(writter http.ResponseWriter, request *http.Request) {
-	print("Request for GetBook...")
 	writter.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(request)
 	id, err := strconv.ParseInt(params["id"], 0, 0)
@@ -61,7 +58,6 @@ func GetBook(writter http.ResponseWriter, request *http.Request) {
 }
 
 func GetBooks(writter http.ResponseWriter, request *http.Request) {
-	print("Request for GetBooks...")
 	writter.Header().Set("Content-Type", "application/json")
 	books := models.GetBooks()
 	res, _ := json.Marshal(books)
@@ -71,15 +67,17 @@ func GetBooks(writter http.ResponseWriter, request *http.Request) {
 
 func UpdateBook(writter http.ResponseWriter, request *http.Request) {
 	writter.Header().Set("Content-Type", "application/json")
+	updated_book := &models.Book{}
+	utils.ParseBody(request, updated_book)
 	params := mux.Vars(request)
 	id, err := strconv.ParseInt(params["id"], 0, 0)
 	if err != nil {
-		print(err)
 		writter.WriteHeader(http.StatusForbidden)
 		writter.Write([]byte(err.Error()))
 		return
 	}
-	book := models.UpdateBook(id)
+	book, db := models.UpdateBook(id)
+	print(db.Error.Error() == gorm.ErrRecordNotFound.Error())
 	res, _ := json.Marshal(book)
 	writter.WriteHeader(http.StatusOK)
 	writter.Write(res)
@@ -90,7 +88,6 @@ func DeleteBook(writter http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
 	id, err := strconv.ParseInt(params["id"], 0, 0)
 	if err != nil {
-		print(err)
 		writter.WriteHeader(http.StatusForbidden)
 		writter.Write([]byte(err.Error()))
 		return
