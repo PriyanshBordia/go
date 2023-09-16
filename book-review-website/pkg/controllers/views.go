@@ -76,8 +76,7 @@ func UpdateBook(writter http.ResponseWriter, request *http.Request) {
 		writter.Write([]byte(err.Error()))
 		return
 	}
-	book, db := models.UpdateBook(id)
-	print(db.Error.Error() == gorm.ErrRecordNotFound.Error())
+	book := models.UpdateBook(id, updated_book)
 	res, _ := json.Marshal(book)
 	writter.WriteHeader(http.StatusOK)
 	writter.Write(res)
@@ -92,8 +91,8 @@ func DeleteBook(writter http.ResponseWriter, request *http.Request) {
 		writter.Write([]byte(err.Error()))
 		return
 	}
-	book := models.DeleteBook(id)
-	res, _ := json.Marshal(book)
+	_ = models.DeleteBook(id)
+	res, _ := json.Marshal("Book deleted.")
 	writter.WriteHeader(http.StatusOK)
 	writter.Write(res)
 }

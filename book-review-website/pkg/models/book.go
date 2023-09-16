@@ -37,16 +37,17 @@ func GetBooks() []Book {
 	return books
 }
 
-func UpdateBook(id int64) (Book, *gorm.DB) {
+func UpdateBook(id int64, updated_book *Book) Book {
 	var book Book
-	db := db.Where("ID=?", id).Update(book)
-	return book, db
+	db := db.Where("ID=?", id).Find(&book)
+	book.Name = updated_book.Name
+	book.Author = updated_book.Author
+	db.Save(&book)
+	return book
 }
-// book.Name = updated_book.Name
-	// book.Author = updated_book.Author
 
-func DeleteBook(id int64) Book {
+func DeleteBook(id int64) *gorm.DB {
 	var book Book
 	db.Where("ID=?", id).Delete(book)
-	return book
+	return db
 }
